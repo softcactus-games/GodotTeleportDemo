@@ -1,0 +1,118 @@
+[gd_scene format=3 uid="uid://ki5nc22psfx3"]
+
+[ext_resource type="Shader" uid="uid://bihqiuy4vggki" path="res://shred/scripts/teleport_shred_showcase.gdshader" id="1_shader"]
+[ext_resource type="Script" uid="uid://dhnv7bf6h3edi" path="res://shred/scripts/shred_minimal.gd" id="2_controller"]
+[ext_resource type="Script" uid="uid://c3jpajpxk0jd" path="res://shred/scripts/shred_minimal_frame.gd" id="3_frame"]
+[ext_resource type="Script" uid="uid://cgbwaea4awu3e" path="res://shred/scripts/shred_subviewport_cube.gd" id="4_cube"]
+[ext_resource type="Texture2D" uid="uid://rc7p2mntqtwg" path="res://assets/texture_01.png" id="5_cubetex"]
+
+[sub_resource type="Resource" id="Frame_0"]
+script = ExtResource("3_frame")
+hold_seconds = 0.1
+density = 1.0
+stretch = 0.0
+stagger = 0.0
+line_width = 1.0
+
+[sub_resource type="Resource" id="Frame_1"]
+script = ExtResource("3_frame")
+density = 0.9
+stretch = 0.35
+stagger = 0.055
+line_width = 0.4
+alpha_gain = 1.5
+
+[sub_resource type="Resource" id="Frame_2"]
+script = ExtResource("3_frame")
+density = 0.52
+stretch = 1.2
+stagger = 0.055
+line_width = 0.4
+concentration = 0.25
+anchor = -0.02
+alpha_gain = 1.5
+
+[sub_resource type="Resource" id="Frame_3"]
+script = ExtResource("3_frame")
+density = 0.53
+stretch = 0.0
+stagger = 0.085
+line_width = 0.41
+concentration = 0.6
+
+[sub_resource type="Resource" id="Frame_4"]
+script = ExtResource("3_frame")
+hold_seconds = 0.5
+density = 0.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cube"]
+albedo_texture = ExtResource("5_cubetex")
+
+[sub_resource type="BoxMesh" id="BoxMesh_cube"]
+material = SubResource("StandardMaterial3D_cube")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_capture"]
+viewport_path = NodePath("SourceViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_shred"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/src_tex = SubResource("ViewportTexture_capture")
+shader_parameter/centroid = Vector2(0.5, 0.5)
+shader_parameter/src_centroid = Vector2(0.5, 0.5)
+shader_parameter/scan_dir = Vector2(0, 1)
+shader_parameter/half_extent = 0.25
+shader_parameter/row_count = 64.0
+shader_parameter/step_seed = 36.55
+shader_parameter/frame_aspect = 1.7777778
+shader_parameter/source_scale = 1.0
+shader_parameter/density = 0.0
+shader_parameter/stretch = 0.6
+shader_parameter/stagger = 0.02
+shader_parameter/line_width = 0.55
+shader_parameter/concentration = 0.0
+shader_parameter/anchor = 0.0
+shader_parameter/alpha_gain = 1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_shred"]
+size = Vector2(3.2, 1.8)
+
+[node name="ShredSubviewport" type="Node3D" unique_id=160233676]
+script = ExtResource("2_controller")
+direction = Vector2(0, 1)
+line_count = 64
+frames = Array[ExtResource("3_frame")]([SubResource("Frame_0"), SubResource("Frame_1"), SubResource("Frame_2"), SubResource("Frame_3"), SubResource("Frame_4")])
+
+[node name="SourceViewport" type="SubViewport" parent="." unique_id=1600964399]
+own_world_3d = true
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(640, 360)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="SourceViewport" unique_id=1345559971]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.2)
+current = true
+
+[node name="KeyLight" type="DirectionalLight3D" parent="SourceViewport" unique_id=2006040379]
+transform = Transform3D(0.766044, 0, 0.642788, 0.368688, 0.819152, -0.439385, -0.526541, 0.573576, 0.627507, 0, 0, 0)
+light_energy = 1.4
+shadow_enabled = true
+
+[node name="FillLight" type="DirectionalLight3D" parent="SourceViewport" unique_id=2096914001]
+transform = Transform3D(0.707107, 0, -0.707107, -0.241845, 0.939693, -0.241845, 0.664463, 0.34202, 0.664463, 0, 0, 0)
+light_energy = 0.45
+
+[node name="Cube" type="MeshInstance3D" parent="SourceViewport" unique_id=2014709558]
+transform = Transform3D(-0.04842042, -0.9986237, 0.020152817, 0, 0.020176483, 0.99979645, -0.99882704, 0.048410565, -0.0009769539, 0, 0, 0)
+mesh = SubResource("BoxMesh_cube")
+script = ExtResource("4_cube")
+
+[node name="ShredQuad" type="MeshInstance3D" parent="." unique_id=1022290565]
+material_override = SubResource("ShaderMaterial_shred")
+mesh = SubResource("QuadMesh_shred")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=484964939]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+current = true

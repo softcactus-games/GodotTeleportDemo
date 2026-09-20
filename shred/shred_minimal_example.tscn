@@ -1,0 +1,85 @@
+[gd_scene format=3 uid="uid://cqtsd7je22nic"]
+
+[ext_resource type="Script" uid="uid://dhnv7bf6h3edi" path="res://shred/scripts/shred_minimal.gd" id="1_7bcsc"]
+[ext_resource type="Script" uid="uid://c3jpajpxk0jd" path="res://shred/scripts/shred_minimal_frame.gd" id="2_xwv52"]
+[ext_resource type="Shader" uid="uid://bihqiuy4vggki" path="res://shred/scripts/teleport_shred_showcase.gdshader" id="3_diann"]
+[ext_resource type="Texture2D" uid="uid://dpdsbyqde3o8v" path="res://assets/glorp.png" id="4_wtqj6"]
+
+[sub_resource type="Resource" id="Resource_ufu6r"]
+script = ExtResource("2_xwv52")
+hold_seconds = 0.1
+density = 1.0
+stretch = 0.0
+stagger = 0.0
+line_width = 1.0
+metadata/_custom_type_script = "uid://c3jpajpxk0jd"
+
+[sub_resource type="Resource" id="ShredMinimalFrame_1"]
+script = ExtResource("2_xwv52")
+density = 0.9
+stretch = 0.35
+stagger = 0.055
+line_width = 0.4
+alpha_gain = 1.5
+
+[sub_resource type="Resource" id="ShredMinimalFrame_2"]
+script = ExtResource("2_xwv52")
+density = 0.52
+stretch = 1.2
+stagger = 0.055
+line_width = 0.4
+concentration = 0.25
+anchor = -0.02
+alpha_gain = 1.5
+
+[sub_resource type="Resource" id="ShredMinimalFrame_3"]
+script = ExtResource("2_xwv52")
+density = 0.53
+stretch = 0.0
+stagger = 0.085
+line_width = 0.41
+concentration = 0.6
+
+[sub_resource type="Resource" id="Resource_owr35"]
+script = ExtResource("2_xwv52")
+hold_seconds = 0.5
+density = 0.0
+metadata/_custom_type_script = "uid://c3jpajpxk0jd"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_shred"]
+render_priority = 0
+shader = ExtResource("3_diann")
+shader_parameter/src_tex = ExtResource("4_wtqj6")
+shader_parameter/centroid = Vector2(0.5, 0.5)
+shader_parameter/src_centroid = Vector2(0.5, 0.5)
+shader_parameter/scan_dir = Vector2(0, 1)
+shader_parameter/half_extent = 0.25
+shader_parameter/row_count = 64.0
+shader_parameter/step_seed = 7.31
+shader_parameter/frame_aspect = 1.7777778
+shader_parameter/source_scale = 0.25
+shader_parameter/density = 1.0
+shader_parameter/stretch = 0.0
+shader_parameter/stagger = 0.0
+shader_parameter/line_width = 1.0
+shader_parameter/concentration = 0.0
+shader_parameter/anchor = 0.0
+shader_parameter/alpha_gain = 1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_shred"]
+material = SubResource("ShaderMaterial_shred")
+size = Vector2(3.2, 1.8)
+
+[node name="ShredMinimal" type="Node3D" unique_id=1206315345]
+script = ExtResource("1_7bcsc")
+direction = Vector2(0, 1)
+line_count = 64
+frames = Array[ExtResource("2_xwv52")]([SubResource("Resource_ufu6r"), SubResource("ShredMinimalFrame_1"), SubResource("ShredMinimalFrame_2"), SubResource("ShredMinimalFrame_3"), SubResource("Resource_owr35")])
+
+[node name="ShredQuad" type="MeshInstance3D" parent="." unique_id=1392210140]
+mesh = SubResource("QuadMesh_shred")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1878331627]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+visible = false
+current = true
